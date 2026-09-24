@@ -110,8 +110,12 @@ res.status(201).json({
         pontoB,
         status
     };
- })
 
+    res.status(200).json({
+        mensagem: "Partida atualizada",
+        partida: PARTIDAS[indice]
+    })
+ });
 
 const PORT = 3000;
 app.listen(PORT, ()=>{
