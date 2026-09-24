@@ -77,9 +77,41 @@ res.status(201).json({
     mensagem: "Partida Cadastrada",
     partida: novaPartida
 
+    });
 });
 
-});
+ app.put("/partidas/:id",(req, res)=>{
+    const id = Number(req.params.id);
+    const indice = PARTIDAS.findIndex(p =>p.id === id);
+
+    if(indice === -1){
+        return res.status(404).json({mensagem: "Partida não encontrada"})
+    }
+
+    const {jogo, timeA, timeB, pontoA, pontoB, status} = req.body;
+
+    if(!jogo || !timeA || !timeB 
+        || !Number.isInteger(timeA)
+        || !Number.isInteger(timeB)
+        || pontoA < 0 || pontoB < 0
+        || ["agendada", "finalizada"].includes(status)
+    ){
+        return res.status(400).json({
+            mensagem: "Envia jogo, times, placares válidos e status"
+        });
+    }
+
+    PARTIDAS[indice] = {
+        id,
+        jogo,
+        timeA,
+        timeB,
+        pontoA,
+        pontoB,
+        status
+    };
+ })
+
 
 const PORT = 3000;
 app.listen(PORT, ()=>{
